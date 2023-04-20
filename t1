@@ -1,0 +1,38 @@
+# Method 1
+x1 <- c(79.98, 80.04, 80.02, 80.04, 80.03, 80.03, 80.04, 79.97, 80.05, 80.03, 80.02, 80.00, 80.02)
+
+# Method 2
+x2 <- c(80.02, 79.74, 79.98, 79.97, 79.97, 80.03, 79.95, 79.97)
+
+# Two-sample t-test
+ttest <- t.test(x1, x2, var.equal = TRUE, alternative = "two.sided", conf.level = 0.9)
+cat("For alpha = 0.10:\n")
+cat(paste0("p-value = ", format(pval <- ttest$p.value, digits = 4), "\n"))
+cat(paste0("t-value = ", format(tval <- ttest$statistic, digits = 4), "\n"))
+if (pval <= 0.10) {
+  cat("Reject the null hypothesis that the means are equal\n")
+} else {
+  cat("Fail to reject the null hypothesis that the means are equal\n")
+}
+cat("\n")
+
+ttest <- t.test(x1, x2, var.equal = TRUE, alternative = "two.sided", conf.level = 0.95)
+cat("For alpha = 0.05:\n")
+cat(paste0("p-value = ", format(pval <- ttest$p.value, digits = 4), "\n"))
+cat(paste0("t-value = ", format(tval <- ttest$statistic, digits = 4), "\n"))
+if (pval <= 0.05) {
+  cat("Reject the null hypothesis that the means are equal\n")
+} else {
+  cat("Fail to reject the null hypothesis that the means are equal\n")
+}
+cat("\n")
+
+# Relative spread
+cat("Relative spread:\n")
+cat(paste0("Method 1: ", format(sd(x1) / mean(x1), digits = 4), "\n"))
+cat(paste0("Method 2: ", format(sd(x2) / mean(x2), digits = 4), "\n"))
+
+
+
+
+
