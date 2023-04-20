@@ -1,0 +1,35 @@
+# Load the necessary packages
+library(dplyr)
+library(MASS)
+library(ggplot2)
+
+# Read the data from the given link
+url <- "https://stat4ds.rwth-aachen.de/data/Iris.dat"
+data <- read.table(url, header = FALSE)
+
+# Rename the columns
+colnames(data) <- c("Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width", "Species")
+
+# Create a new response variable
+n <- sum(data$Species == "I.versicolor")
+m <- sum(data$Species == "I.virginica")
+data$Response <- ifelse(data$Species == "I.versicolor", -(n+m)/n, (n+m)/m)
+
+# Drop the first and last columns
+data <- data %>% select(-c(1, 6))
+
+# Fit a regression model and extract the coefficients
+fit <- lm(Response ~ ., data)
+coef <- coef(fit)[-1]
+
+# Project the data onto the estimated subspace
+proj_data <- as.matrix(data[,1:4]) %*% coef
+
+# Combine the projected data with the species column
+proj_data <- data.frame(proj_data, Species = data$Species)
+
+# Create a plot of the projected data with different colors for each species
+ggplot(proj_data, aes(x = proj_data[,1], y = 0, color = Species)) + 
+  geom_point() + 
+  labs(x = "Projected Data", y = "") +
+  theme(legend.title = element_blank())
