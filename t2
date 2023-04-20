@@ -1,0 +1,22 @@
+# Load the necessary packages
+library(vcd)
+library(readr)
+
+# Read the data from the given link
+url <- "http://stat4ds.rwth-aachen.de/data/GSS2018.dat"
+data <- read_delim(url, delim = " ", col_names = FALSE)
+
+# Set the column names
+colnames(data) <- c("PRES16", "SEX")
+
+# Create a contingency table
+tab <- table(data$PRES16, data$SEX)
+tab
+
+# Calculate the conditional distributions
+prop.table(tab, 1)
+prop.table(tab, 2)
+
+# Perform the chi-squared test and create a mosaic plot
+chisq.test(tab)
+mosaic(tab, shade = TRUE, legend = TRUE)
